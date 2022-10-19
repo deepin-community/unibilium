@@ -1,0 +1,3 @@
+version=3
+opts="filenamemangle=s/(?:.*)?v?([\d.]+)\.tar\.gz/unibilium-$1.tar.gz/" \
+  https://github.com/neovim/unibilium/tags (?:.*/)?v([\d.]+)\.tar\.gz

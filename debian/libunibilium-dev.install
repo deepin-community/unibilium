@@ -1,0 +1,7 @@
+debian/tmp/usr/include
+debian/tmp/usr/lib/*/libunibilium.a
+debian/tmp/usr/lib/*/libunibilium.so
+debian/tmp/usr/lib/*/pkgconfig
+debian/tmp/usr/share/man
+tools/unibi-dump.c  /usr/share/doc/libunibilium-dev/examples
+tools/unibi-put.c  /usr/share/doc/libunibilium-dev/examples

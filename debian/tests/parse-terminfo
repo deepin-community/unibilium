@@ -1,0 +1,36 @@
+#!/bin/sh
+set -e
+
+WORKDIR=${AUTOPKGTEST_TMP:-$ADT_TMP}
+cc -Wall $(pkg-config --cflags unibilium) -o "$WORKDIR"/tdump debian/tests/terminfo-dump.c $(pkg-config --libs unibilium)
+
+cd "$WORKDIR"
+
+FAIL=0
+TESTS=0
+for term in ansi xterm screen rxvt-unicode; do
+  libterm=/lib/terminfo/${term%${term#?}}/${term}
+  usrterm=/usr/${libterm}
+  if [ -e "$libterm" ]; then
+    printf "# Parsing $libterm ...\\n"
+    TESTS=$((TESTS + 1))
+    ./tdump "$libterm" || FAIL=1
+    if [ -e "${libterm}-256color" ]; then
+      printf "# Parsing ${libterm}-256color ...\\n"
+      TESTS=$((TESTS + 1))
+      ./tdump "${libterm}-256color" || FAIL=1
+    fi
+  elif [ -e "$usrterm" ]; then
+    printf "# Parsing $usrterm ...\\n"
+    TESTS=$((TESTS + 1))
+    ./tdump "$usrterm" || FAIL=1
+    if [ -e "${usrterm}-256color" ]; then
+      printf "# Parsing ${usrterm}-256color ...\\n"
+      TESTS=$((TESTS + 1))
+      ./tdump "${usrterm}-256color" || FAIL=1
+    fi
+  fi
+done
+printf "1..${TESTS}\\n"
+
+exit $FAIL

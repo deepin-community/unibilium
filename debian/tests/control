@@ -1,0 +1,6 @@
+Tests: parse-terminfo
+Depends:
+ build-essential,
+ ncurses-base,
+ pkg-config,
+ @,

@@ -1,0 +1,20 @@
+#!/usr/bin/make -f
+
+DEB_BUILD_MAINT_OPTIONS = hardening=+all
+include /usr/share/dpkg/default.mk
+
+CFLAGS += $(CPPFLAGS)
+export CFLAGS
+export LDFLAGS
+
+LIBTOOL=libtool
+ifneq (,$(filter terse,$(DEB_BUILD_OPTIONS)))
+	LIBTOOL+=--quiet
+endif
+export LIBTOOL
+
+%:
+	dh $@ --buildsystem makefile
+
+override_dh_auto_install:
+	$(MAKE) DESTDIR="$(CURDIR)/debian/tmp" PREFIX=/usr LIBDIR='$${PREFIX}/lib/$(DEB_HOST_MULTIARCH)' install
